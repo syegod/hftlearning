@@ -2,22 +2,21 @@ package io.sye.sbe;
 
 import io.sye.sbe.pojo.TradeData;
 import java.math.BigDecimal;
-import java.nio.ByteBuffer;
-import org.agrona.concurrent.UnsafeBuffer;
+import org.agrona.ExpandableArrayBuffer;
+import org.agrona.MutableDirectBuffer;
 
 public class SbeMessageCodec {
-
 
   private static final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
   private static final MessageHeaderDecoder headerDecoder = new MessageHeaderDecoder();
   private static final TradeDataEncoder tradeDataEncoder = new TradeDataEncoder();
   private static final TradeDataDecoder tradeDataDecoder = new TradeDataDecoder();
-  private static final UnsafeBuffer buffer = new UnsafeBuffer(ByteBuffer.allocateDirect(128));
+  private static final MutableDirectBuffer buffer = new ExpandableArrayBuffer();
 
   private SbeMessageCodec() {
   }
 
-  public static ByteBuffer encodeTradeData(TradeData tradeData) {
+  public static MutableDirectBuffer encodeTradeData(TradeData tradeData) {
     final var encoder = tradeDataEncoder.wrapAndApplyHeader(buffer, 0, headerEncoder);
     int priceMantissa = tradeData.price().scaleByPowerOfTen(tradeData.price().scale()).intValue();
     int priceExponent = tradeData.price().scale() * -1;
@@ -28,11 +27,11 @@ public class SbeMessageCodec {
         .price()
         .mantissa(priceMantissa)
         .exponent((byte) priceExponent);
-    return buffer.byteBuffer();
+    return buffer;
   }
 
-  public static TradeData decodeTradeData(ByteBuffer byteBuffer) {
-    tradeDataDecoder.wrapAndApplyHeader(buffer, 0, headerDecoder);
+  public static TradeData decodeTradeData(MutableDirectBuffer directBuffer) {
+    tradeDataDecoder.wrapAndApplyHeader(directBuffer, 0, headerDecoder);
 
     var price = BigDecimal.valueOf(tradeDataDecoder.quote().price().mantissa())
         .scaleByPowerOfTen(tradeDataDecoder.quote().price().exponent());

@@ -29,7 +29,7 @@
     </enum>
     <type name="Symbol" primitiveType="char" length="6" characterEncoding="ASCII"
       description="Stock symbol"/>
-    <composite name="Decimal">
+    <composite name="BigDecimal">
       <type name="mantissa" primitiveType="uint64" minValue="0"/>
       <type name="exponent" primitiveType="int8"/>
     </composite>
@@ -38,7 +38,7 @@
       <validValue name="EUR" description="Euro">1</validValue>
     </enum>
     <composite name="BidAsk">
-      <ref name="price" type="Decimal"/>
+      <ref name="price" type="BigDecimal"/>
       <type name="size" primitiveType="uint32"/>
       <type name="orderCount" primitiveType="uint16"/>
     </composite>
@@ -46,7 +46,7 @@
       description="A quote represents the price of a stock in a market">
       <ref name="market" type="Market"/>
       <ref name="symbol" type="Symbol"/>
-      <ref name="price" type="Decimal"/>
+      <ref name="price" type="BigDecimal"/>
       <ref name="currency" type="Currency"/>
     </composite>
   </types>
