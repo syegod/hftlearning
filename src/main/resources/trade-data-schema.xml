@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<types>
+  <enum name="Market" encodingType="uint8">
+    <validValue name="NYSE" description="New York Stock Exchange">0</validValue>
+    <validValue name="NASDAQ"
+      description="National Association of Securities Dealers Automated Quotations">1
+    </validValue>
+  </enum>
+  <type name="Symbol" primitiveType="char" length="6" characterEncoding="ASCII"
+    description="Stock symbol"/>
+  <composite name="Decimal">
+    <type name="mantissa" primitiveType="uint64"/>
+    <type name="exponent" primitiveType="int8"/>
+  </composite>
+  <enum name="Currency" encodingType="uint8">
+    <validValue name="USD" description="US Dollar">0</validValue>
+    <validValue name="EUR" description="Euro">1</validValue>
+  </enum>
+  <composite name="BidAsk">
+    <ref name="price" type="Decimal"/>
+    <type name="size" primitiveType="uint32"/>
+    <type name="orderCount" primitiveType="uint16" minValue="1"/>
+  </composite>
+  <composite name="Quote"
+    description="A quote represents the price of a stock in a market">
+    <ref name="market" type="Market"/>
+    <ref name="symbol" type="Symbol"/>
+    <ref name="price" type="Decimal"/>
+    <ref name="currency" type="Currency"/>
+  </composite>
+</types>
