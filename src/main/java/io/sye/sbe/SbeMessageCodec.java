@@ -1,5 +1,6 @@
 package io.sye.sbe;
 
+import io.sye.sbe.pojo.TradeData;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import org.agrona.concurrent.UnsafeBuffer;

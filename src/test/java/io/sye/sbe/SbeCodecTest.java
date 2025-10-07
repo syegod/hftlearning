@@ -2,6 +2,7 @@ package io.sye.sbe;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import io.sye.sbe.pojo.TradeData;
 import java.math.BigDecimal;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeAll;

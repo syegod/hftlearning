@@ -1,5 +1,7 @@
-package io.sye.sbe;
+package io.sye.sbe.pojo;
 
+import io.sye.sbe.Currency;
+import io.sye.sbe.Market;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.StringJoiner;

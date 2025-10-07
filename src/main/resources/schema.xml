@@ -18,7 +18,7 @@
       <validValue name="FALSE">0</validValue>
       <validValue name="TRUE">1</validValue>
     </enum>
-    <composite name="varStringEncoding">
+    <composite name="String">
       <type name="length" primitiveType="uint32" maxValue="1073741824"/>
       <type name="varData" primitiveType="uint8" length="0" characterEncoding="UTF-8"/>
     </composite>
@@ -27,7 +27,7 @@
       <validValue name="NYSE">0</validValue>
       <validValue name="NASDAQ">1</validValue>
     </enum>
-    <type name="Symbol" primitiveType="char" length="4" characterEncoding="ASCII"
+    <type name="Symbol" primitiveType="char" length="6" characterEncoding="ASCII"
       description="Stock symbol"/>
     <composite name="Decimal">
       <type name="mantissa" primitiveType="uint64" minValue="0"/>
@@ -50,18 +50,19 @@
       <ref name="currency" type="Currency"/>
     </composite>
   </types>
+
   <sbe:message name="TradeData" id="1">
     <field name="quote" id="1" type="Quote"/>
     <field name="amount" id="2" type="uint16"/>
   </sbe:message>
   <sbe:message name="OrderBookUpdate" id="2">
-    <field name="sequenceNumber" id="1" type="uint64"/>
+    <field name="id" id="1" type="uint64"/>
     <field name="symbol" id="2" type="Symbol"/>
     <field name="timestamp" id="3" type="uint64"/>
-    <group name="bids" id="4" dimensionType="groupSizeEncoding">
+    <group name="bids" id="4">
       <field name="bid" id="5" type="BidAsk"/>
     </group>
-    <group name="asks" id="6" dimensionType="groupSizeEncoding">
+    <group name="asks" id="6">
       <field name="ask" id="7" type="BidAsk"/>
     </group>
   </sbe:message>
