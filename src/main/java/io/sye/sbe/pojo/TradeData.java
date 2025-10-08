@@ -8,17 +8,17 @@ import java.util.StringJoiner;
 
 public class TradeData {
 
-  private int amount;
+  private BigDecimal amount;
   private BigDecimal price;
   private Market market;
   private Currency currency;
   private String symbol;
 
-  public int amount() {
+  public BigDecimal amount() {
     return amount;
   }
 
-  public TradeData amount(int amount) {
+  public TradeData amount(BigDecimal amount) {
     this.amount = amount;
     return this;
   }
@@ -61,12 +61,13 @@ public class TradeData {
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof TradeData that)) {
+    if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return amount == that.amount && Objects.equals(price, that.price)
-        && market == that.market && currency == that.currency && Objects.equals(symbol,
-        that.symbol);
+    TradeData tradeData = (TradeData) o;
+    return Objects.equals(amount, tradeData.amount) && Objects.equals(price,
+        tradeData.price) && market == tradeData.market && currency == tradeData.currency
+        && Objects.equals(symbol, tradeData.symbol);
   }
 
   @Override

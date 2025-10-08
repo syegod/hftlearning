@@ -23,15 +23,15 @@
       <type name="varData" primitiveType="uint8" length="0" characterEncoding="UTF-8"/>
     </composite>
     <!--    Custom types-->
-    <enum name="Market" encodingType="uint8">
+    <enum name="Market" encodingType="int8">
       <validValue name="NYSE">0</validValue>
       <validValue name="NASDAQ">1</validValue>
     </enum>
     <type name="Symbol" primitiveType="char" length="6" characterEncoding="ASCII"
       description="Stock symbol"/>
     <composite name="BigDecimal">
-      <type name="mantissa" primitiveType="uint64" minValue="0"/>
-      <type name="exponent" primitiveType="int8"/>
+      <type name="value" primitiveType="int64" minValue="0"/>
+      <type name="scale" primitiveType="int8"/>
     </composite>
     <enum name="Currency" encodingType="uint8">
       <validValue name="USD" description="US Dollar">0</validValue>
@@ -39,8 +39,8 @@
     </enum>
     <composite name="BidAsk">
       <ref name="price" type="BigDecimal"/>
-      <type name="size" primitiveType="uint32"/>
-      <type name="orderCount" primitiveType="uint16"/>
+      <type name="size" primitiveType="int64"/>
+      <type name="orderCount" primitiveType="int32"/>
     </composite>
     <composite name="Quote"
       description="A quote represents the price of a stock in a market">
@@ -53,12 +53,12 @@
 
   <sbe:message name="TradeData" id="1">
     <field name="quote" id="1" type="Quote"/>
-    <field name="amount" id="2" type="uint16"/>
+    <field name="amount" id="2" type="BigDecimal"/>
   </sbe:message>
   <sbe:message name="OrderBookUpdate" id="2">
-    <field name="id" id="1" type="uint64"/>
+    <field name="id" id="1" type="int64"/>
     <field name="symbol" id="2" type="Symbol"/>
-    <field name="timestamp" id="3" type="uint64"/>
+    <field name="timestamp" id="3" type="int64"/>
     <group name="bids" id="4">
       <field name="bid" id="5" type="BidAsk"/>
     </group>

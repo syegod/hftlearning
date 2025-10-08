@@ -1,7 +1,6 @@
 package io.sye.sbe;
 
 import io.sye.sbe.pojo.TradeData;
-import java.math.BigDecimal;
 import org.agrona.ExpandableArrayBuffer;
 import org.agrona.MutableDirectBuffer;
 
@@ -18,29 +17,22 @@ public class SbeMessageCodec {
 
   public static MutableDirectBuffer encodeTradeData(TradeData tradeData) {
     final var encoder = tradeDataEncoder.wrapAndApplyHeader(buffer, 0, headerEncoder);
-    int priceMantissa = tradeData.price().scaleByPowerOfTen(tradeData.price().scale()).intValue();
-    int priceExponent = tradeData.price().scale() * -1;
-    encoder.amount(tradeData.amount()).quote()
+    BigDecimalCodec.encodeBigDecimal(tradeData.price(), encoder.quote().price());
+    BigDecimalCodec.encodeBigDecimal(tradeData.amount(), encoder.amount());
+    encoder.quote()
         .symbol(tradeData.symbol())
         .currency(tradeData.currency())
-        .market(tradeData.market())
-        .price()
-        .mantissa(priceMantissa)
-        .exponent((byte) priceExponent);
+        .market(tradeData.market());
     return buffer;
   }
 
   public static TradeData decodeTradeData(MutableDirectBuffer directBuffer) {
     tradeDataDecoder.wrapAndApplyHeader(directBuffer, 0, headerDecoder);
-
-    var price = BigDecimal.valueOf(tradeDataDecoder.quote().price().mantissa())
-        .scaleByPowerOfTen(tradeDataDecoder.quote().price().exponent());
-
     return new TradeData()
-        .amount(tradeDataDecoder.amount())
+        .amount(BigDecimalCodec.decodeBigDecimal(tradeDataDecoder.amount()))
         .market(tradeDataDecoder.quote().market())
         .currency(tradeDataDecoder.quote().currency())
         .symbol(tradeDataDecoder.quote().symbol())
-        .price(price);
+        .price(BigDecimalCodec.decodeBigDecimal(tradeDataDecoder.quote().price()));
   }
 }
