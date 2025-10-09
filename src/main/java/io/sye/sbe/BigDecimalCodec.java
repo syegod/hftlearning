@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 public class BigDecimalCodec {
 
+  private BigDecimalCodec() {
+  }
+
   public static void encodeBigDecimal(BigDecimal value, BigDecimalEncoder encoder) {
     long unscaled = value.unscaledValue().longValueExact();
     encoder.value(unscaled);
