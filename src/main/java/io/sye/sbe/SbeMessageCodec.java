@@ -6,16 +6,13 @@ import org.agrona.MutableDirectBuffer;
 
 public class SbeMessageCodec {
 
-  private static final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
-  private static final MessageHeaderDecoder headerDecoder = new MessageHeaderDecoder();
-  private static final TradeDataEncoder tradeDataEncoder = new TradeDataEncoder();
-  private static final TradeDataDecoder tradeDataDecoder = new TradeDataDecoder();
-  private static final MutableDirectBuffer buffer = new ExpandableArrayBuffer();
+  private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+  private final MessageHeaderDecoder headerDecoder = new MessageHeaderDecoder();
+  private final TradeDataEncoder tradeDataEncoder = new TradeDataEncoder();
+  private final TradeDataDecoder tradeDataDecoder = new TradeDataDecoder();
+  private final MutableDirectBuffer buffer = new ExpandableArrayBuffer();
 
-  private SbeMessageCodec() {
-  }
-
-  public static MutableDirectBuffer encodeTradeData(TradeData tradeData) {
+  public MutableDirectBuffer encodeTradeData(TradeData tradeData) {
     final var encoder = tradeDataEncoder.wrapAndApplyHeader(buffer, 0, headerEncoder);
     BigDecimalCodec.encodeBigDecimal(tradeData.price(), encoder.quote().price());
     BigDecimalCodec.encodeBigDecimal(tradeData.amount(), encoder.amount());
@@ -26,7 +23,7 @@ public class SbeMessageCodec {
     return buffer;
   }
 
-  public static TradeData decodeTradeData(MutableDirectBuffer directBuffer) {
+  public TradeData decodeTradeData(MutableDirectBuffer directBuffer) {
     tradeDataDecoder.wrapAndApplyHeader(directBuffer, 0, headerDecoder);
     return new TradeData()
         .amount(BigDecimalCodec.decodeBigDecimal(tradeDataDecoder.amount()))

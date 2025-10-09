@@ -7,14 +7,16 @@ import java.math.BigDecimal;
 import java.util.Random;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SbeCodecTest {
 
   private static TradeData tradeData;
+  private SbeMessageCodec codec;
 
   @BeforeAll
-  static void setup() {
+  static void beforeAll() {
     tradeData = new TradeData()
         .amount(BigDecimal.valueOf(10))
         .price(BigDecimal.valueOf(187.62))
@@ -23,10 +25,15 @@ public class SbeCodecTest {
         .symbol("NVDA");
   }
 
+  @BeforeEach
+  void beforeEach() {
+    codec = new SbeMessageCodec();
+  }
+
   @Test
   void testTradeDataEncodeDecode() {
-    final var buffer = SbeMessageCodec.encodeTradeData(tradeData);
-    final var decodedData = SbeMessageCodec.decodeTradeData(buffer);
+    final var buffer = codec.encodeTradeData(tradeData);
+    final var decodedData = codec.decodeTradeData(buffer);
 
     assertEquals(tradeData, decodedData);
   }
@@ -44,8 +51,8 @@ public class SbeCodecTest {
           .currency(Currency.get((byte) rand.nextInt(2)))
           .symbol(symbols[rand.nextInt(0, symbols.length)]);
 
-      final var buffer = SbeMessageCodec.encodeTradeData(data);
-      final var decodedData = SbeMessageCodec.decodeTradeData(buffer);
+      final var buffer = codec.encodeTradeData(data);
+      final var decodedData = codec.decodeTradeData(buffer);
 
       assertEquals(data, decodedData);
     });
