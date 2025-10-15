@@ -18,7 +18,7 @@
       <validValue name="FALSE">0</validValue>
       <validValue name="TRUE">1</validValue>
     </enum>
-    <composite name="String">
+    <composite name="varStringEncoding">
       <type name="length" primitiveType="uint32" maxValue="1073741824"/>
       <type name="varData" primitiveType="uint8" length="0" characterEncoding="UTF-8"/>
     </composite>
@@ -38,8 +38,8 @@
       <type name="scale" primitiveType="int8"/>
     </composite>
     <enum name="Currency" encodingType="int8">
-      <validValue name="USD" description="US Dollar">0</validValue>
-      <validValue name="EUR" description="Euro">1</validValue>
+      <validValue name="USD">0</validValue>
+      <validValue name="EUR">1</validValue>
     </enum>
     <composite name="BidAsk">
       <ref name="price" type="BigDecimal"/>
@@ -88,7 +88,7 @@
     <field name="totalVolume" id="5" type="int64"/>
     <group name="participants" id="6">
       <field name="id" id="7" type="int64"/>
-      <data name="name" id="8" type="String"/>
+      <data name="name" id="8" type="varStringEncoding"/>
       <data name="publicKey" id="9" type="varDataEncoding"/>
     </group>
     <group name="tradeRecords" id="10">
@@ -101,26 +101,3 @@
     </group>
   </sbe:message>
 </sbe:messageSchema>
-
-
-  <!--
-  TradeSummary {
-    int64 summaryId
-    string symbol
-    uint64 startTimestamp
-    uint64 endTimestamp
-    uint32 totalTrades
-    uint64 totalVolume
-    group participants {
-        uint32 participantId
-        string name
-        byte[] publicKey
-        group tradeRecords {
-            uint64 tradeId
-            uint64 price
-            uint32 quantity
-            string tradeType // e.g. "BUY" or "SELL"
-        }
-    }
-  }
-  -->

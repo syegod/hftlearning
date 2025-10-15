@@ -1,7 +1,8 @@
 package io.sye.sbe.pojo.summary;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class TradeSummary {
 
@@ -10,8 +11,8 @@ public class TradeSummary {
   private long timestamp;
   private long totalTrades;
   private long totalVolume;
-  private List<Participant> participants;
-  private List<TradeRecord> tradeRecords;
+  private Participant[] participants;
+  private TradeRecord[] tradeRecords;
 
   public long id() {
     return id;
@@ -58,20 +59,20 @@ public class TradeSummary {
     return this;
   }
 
-  public List<Participant> participants() {
+  public Participant[] participants() {
     return participants;
   }
 
-  public TradeSummary participants(List<Participant> participants) {
+  public TradeSummary participants(Participant[] participants) {
     this.participants = participants;
     return this;
   }
 
-  public List<TradeRecord> tradeRecords() {
+  public TradeRecord[] tradeRecords() {
     return tradeRecords;
   }
 
-  public TradeSummary tradeRecords(List<TradeRecord> tradeRecords) {
+  public TradeSummary tradeRecords(TradeRecord[] tradeRecords) {
     this.tradeRecords = tradeRecords;
     return this;
   }
@@ -84,13 +85,26 @@ public class TradeSummary {
     TradeSummary that = (TradeSummary) o;
     return id == that.id && timestamp == that.timestamp && totalTrades == that.totalTrades
         && totalVolume == that.totalVolume && Objects.equals(symbol, that.symbol)
-        && Objects.equals(participants, that.participants) && Objects.equals(
-        tradeRecords, that.tradeRecords);
+        && Objects.deepEquals(participants, that.participants)
+        && Objects.deepEquals(tradeRecords, that.tradeRecords);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, symbol, timestamp, totalTrades, totalVolume, participants,
-        tradeRecords);
+    return Objects.hash(id, symbol, timestamp, totalTrades, totalVolume,
+        Arrays.hashCode(participants), Arrays.hashCode(tradeRecords));
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", TradeSummary.class.getSimpleName() + "[", "]")
+        .add("id=" + id)
+        .add("symbol='" + symbol + "'")
+        .add("timestamp=" + timestamp)
+        .add("totalTrades=" + totalTrades)
+        .add("totalVolume=" + totalVolume)
+        .add("participants=" + Arrays.toString(participants))
+        .add("tradeRecords=" + Arrays.toString(tradeRecords))
+        .toString();
   }
 }
