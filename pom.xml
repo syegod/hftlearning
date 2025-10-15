@@ -18,7 +18,7 @@
     <junit.version>5.11.3</junit.version>
     <jmh-core.version>1.37</jmh-core.version>
     <sbe-tool.version>1.36.0</sbe-tool.version>
-    <agrona.version>2.3.0</agrona.version>
+    <agrona.version>1.23.1</agrona.version>
   </properties>
 
   <dependencyManagement>
