@@ -1,12 +1,5 @@
 package io.sye.sbe.pojo.summary;
 
-//      <field name="tradeId" id="11" type="int64"/>
-//      <field name="participantId" id="12" type="int64"/>
-//      <field name="price" id="13" type="BigDecimal"/>
-//      <field name="quantity" id="14" type="BigDecimal"/>
-//      <field name="type" id="15" type="TradeType"/>
-//      <field name="uuid" id="16" type="UUID"/>
-
 import io.sye.sbe.TradeType;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -21,6 +14,7 @@ public class TradeRecord {
   private BigDecimal quantity;
   private TradeType type;
   private UUID uuid;
+  private long settlementTimestamp;
 
   public long id() {
     return id;
@@ -76,20 +70,30 @@ public class TradeRecord {
     return this;
   }
 
+  public long settlementTimestamp() {
+    return settlementTimestamp;
+  }
+
+  public TradeRecord settlementTimestamp(long settlementTimestamp) {
+    this.settlementTimestamp = settlementTimestamp;
+    return this;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
     TradeRecord that = (TradeRecord) o;
-    return id == that.id && participantId == that.participantId && Objects.equals(price,
+    return id == that.id && participantId == that.participantId
+        && settlementTimestamp == that.settlementTimestamp && Objects.equals(price,
         that.price) && Objects.equals(quantity, that.quantity) && type == that.type
         && Objects.equals(uuid, that.uuid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, participantId, price, quantity, type, uuid);
+    return Objects.hash(id, participantId, price, quantity, type, uuid, settlementTimestamp);
   }
 
   @Override
@@ -101,6 +105,7 @@ public class TradeRecord {
         .add("quantity=" + quantity)
         .add("type=" + type)
         .add("uuid=" + uuid)
+        .add("settlementTimestamp=" + settlementTimestamp)
         .toString();
   }
 }

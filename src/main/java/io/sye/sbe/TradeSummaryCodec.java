@@ -31,10 +31,13 @@ public class TradeSummaryCodec {
     }
     var records = encoder.tradeRecordsCount(summary.tradeRecords().length);
     for (var r : summary.tradeRecords()) {
-      records.next().id(r.id()).participantId(r.participantId()).type(r.type());
+      var next = records.next().id(r.id()).participantId(r.participantId()).type(r.type());
       UUIDCodec.encode(r.uuid(), records.uuid());
       BigDecimalCodec.encodeBigDecimal(r.price(), records.price());
       BigDecimalCodec.encodeBigDecimal(r.quantity(), records.quantity());
+      if (r.settlementTimestamp() != 0) {
+        next.settlementTimestamp(r.settlementTimestamp());
+      }
     }
 
     return buffer;
@@ -71,7 +74,8 @@ public class TradeSummaryCodec {
       newRec.id(r.id()).participantId(r.participantId())
           .price(BigDecimalCodec.decodeBigDecimal(r.price()))
           .quantity(BigDecimalCodec.decodeBigDecimal(r.quantity())).type(r.type())
-          .uuid(UUIDCodec.decode(r.uuid()));
+          .uuid(UUIDCodec.decode(r.uuid()))
+          .settlementTimestamp(r.settlementTimestamp());
       sumRecords[i++] = newRec;
     }
     summary.participants(sumParticipants);

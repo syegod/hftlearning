@@ -60,7 +60,8 @@ public class TradeSummaryCodecTest {
             .price(BigDecimal.valueOf(random.nextDouble(0.0001, 100000)))
             .quantity(BigDecimal.valueOf(random.nextDouble(0.0001, 100000)))
             .type(random.nextBoolean() ? TradeType.BUY : TradeType.SELL)
-            .uuid(UUID.randomUUID());
+            .uuid(UUID.randomUUID())
+            .settlementTimestamp(System.currentTimeMillis());
         records[j] = newRec;
       });
 
