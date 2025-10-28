@@ -1,34 +1,27 @@
 package io.sye.networking;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.ServerSocketChannel;
+import java.net.ServerSocket;
+import java.nio.charset.StandardCharsets;
 
 public class SimpleServer {
 
   public static void main(String[] args) throws IOException {
-    final var server = ServerSocketChannel.open();
-    server.bind(new InetSocketAddress("192.168.0.11", 5000));
+    final var server = new ServerSocket(8000);
 
     while (true) {
       final var client = server.accept();
+      System.out.println(
+          "Established connection with: " + client.getInetAddress().getHostAddress());
+      final var in = client.getInputStream();
+      final var out = client.getOutputStream();
 
-      final var buff = ByteBuffer.allocate(256);
-      var bytesRead = client.read(buff);
-      final var str = new StringBuilder();
-      while (bytesRead != 0 && bytesRead != -1) {
-        buff.flip();
-
-        while (buff.hasRemaining()) {
-          str.append(buff.getChar());
-        }
-
-        buff.clear();
-        bytesRead = client.read(buff);
+      int rcvd;
+      final var bytes = new byte[64];
+      while ((rcvd = in.read(bytes)) != -1) {
+        System.out.println(new String(bytes, StandardCharsets.UTF_8));
+        out.write(bytes);
       }
-
-      System.out.println(str);
       client.close();
     }
   }
